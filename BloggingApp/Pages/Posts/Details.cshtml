@@ -1,0 +1,51 @@
+@page "{id:int}"
+@model BloggingApp.Pages.Posts.DetailsModel
+@{
+    ViewData["Title"] = Model.Post?.Title ?? "Post Details";
+}
+
+<div class="page-shell">
+    <section class="content-column">
+        @if (Model.Post is null)
+        {
+            <p class="empty-state">The requested post could not be found.</p>
+        }
+        else
+        {
+            <article class="post-detail">
+                <a class="back-link" asp-page="/Index">Back to home</a>
+                <div class="post-meta">
+                    <span>@Model.Post.Category?.Name</span>
+                    <span>@Model.Post.PublishedOn.ToString("MMMM d, yyyy")</span>
+                </div>
+                <h1 class="page-title">@Model.Post.Title</h1>
+                <p class="post-summary">@Model.Post.Summary</p>
+                <div class="post-body">
+                    <p>@Model.Post.Content</p>
+                </div>
+            </article>
+        }
+    </section>
+
+    <aside class="sidebar-column">
+        <section class="sidebar-panel">
+            <h2 class="sidebar-title">Related Posts</h2>
+
+            @if (Model.RelatedPosts.Count == 0)
+            {
+                <p class="empty-state">No related posts in this category.</p>
+            }
+            else
+            {
+                <ul class="sidebar-links">
+                    @foreach (var post in Model.RelatedPosts)
+                    {
+                        <li>
+                            <a asp-page="/Posts/Details" asp-route-id="@post.Id">@post.Title</a>
+                        </li>
+                    }
+                </ul>
+            }
+        </section>
+    </aside>
+</div>

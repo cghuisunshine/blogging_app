@@ -1,0 +1,63 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Blog Home";
+}
+
+<div class="page-shell">
+    <section class="content-column">
+        <h1 class="page-title">Recent Posts</h1>
+
+        @if (Model.Posts.Count == 0)
+        {
+            <p class="empty-state">No posts are available yet.</p>
+        }
+        else
+        {
+            <div class="post-list">
+                @foreach (var post in Model.Posts)
+                {
+                    <article class="post-card">
+                        <div class="post-meta">
+                            <span>@post.Category?.Name</span>
+                            <span>@post.PublishedOn.ToString("MMMM d, yyyy")</span>
+                        </div>
+                        <h2 class="post-title">
+                            <a asp-page="/Posts/Details" asp-route-id="@post.Id">@post.Title</a>
+                        </h2>
+                        <p class="post-summary">@post.Summary</p>
+                        <a class="post-link" asp-page="/Posts/Details" asp-route-id="@post.Id">Read post</a>
+                    </article>
+                }
+            </div>
+        }
+    </section>
+
+    <aside class="sidebar-column">
+        <section class="sidebar-panel">
+            <h2 class="sidebar-title">Posts by Category</h2>
+
+            @if (Model.SidebarCategories.Count == 0)
+            {
+                <p class="empty-state">No categories available.</p>
+            }
+            else
+            {
+                @foreach (var category in Model.SidebarCategories)
+                {
+                    <div class="category-group">
+                        <h3>@category.Name</h3>
+                        <ul class="sidebar-links">
+                            @foreach (var post in category.Posts)
+                            {
+                                <li>
+                                    <a asp-page="/Posts/Details" asp-route-id="@post.Id">@post.Title</a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                }
+            }
+        </section>
+    </aside>
+</div>
